@@ -13,3 +13,5 @@ Cargo.lock
 # Local stuff
 .idea/
 .DS_Store
+/HelloWorld/.idea/
+/HelloWorld/.DS_Store
