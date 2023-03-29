@@ -11,4 +11,5 @@ Cargo.lock
 
 
 # Local stuff
-.idea
+.idea/
+.DS_Store
