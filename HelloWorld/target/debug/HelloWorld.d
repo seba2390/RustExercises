@@ -1,0 +1,1 @@
+/Users/sebastianyde/Library/CloudStorage/OneDrive-AarhusUniversitet/Div.\ Github\ projekter/RustExercises/HelloWorld/target/debug/HelloWorld: /Users/sebastianyde/Library/CloudStorage/OneDrive-AarhusUniversitet/Div.\ Github\ projekter/RustExercises/HelloWorld/src/main.rs

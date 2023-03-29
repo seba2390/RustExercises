@@ -1,0 +1,10 @@
+[package]
+name = "hello_world" # Should use 'snake case' convention for naming
+version = "0.1.0"
+authors = ["Sebastian Yde Madsen <sem@kvantify.dk>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ferris-says="0.2" # Just for showing how to include library (remember to run 'cargo build')
