@@ -1,3 +1,5 @@
+#![crate_name = "doc"]
+
 use std::io::Write;
 
 // Type aliases
@@ -56,6 +58,35 @@ fn print_description() {
     println!(" #################################################################");
 }
 
+
+/// Determines if a winning condition has been met on the provided Tic-Tac-Toe grid.
+///
+/// This function checks for three in a row, either horizontally, vertically, or diagonally, in order to
+/// determine if a player has won the game.
+///
+/// # Arguments
+///
+/// * `grid` - A reference to a 3x3 array representing the Tic-Tac-Toe grid. Each element of the array is a `char`
+///            representing the contents of that cell ('X', 'O', or ' ').
+///
+/// # Returns
+///
+/// A tuple of two booleans representing whether each player has won the game. The first element of the tuple
+/// is `true` if player 1 has won, and `false` otherwise. The second element of the tuple is `true` if player
+/// 2 has won, and `false` otherwise. If neither player has won, both elements of the tuple are `false`.
+///
+/// # Examples
+///
+/// ```
+/// let grid = [['X', 'O', ' '], [' ', 'X', ' '], ['O', 'O', 'X']];
+/// assert_eq!(has_winner(&grid), (true, false));
+///
+/// let grid = [['O', 'O', 'X'], ['X', 'X', 'O'], ['O', 'X', ' ']];
+/// assert_eq!(has_winner(&grid), (false, true));
+///
+/// let grid = [['X', 'O', 'X'], ['X', 'O', 'O'], ['O', 'X', 'O']];
+/// assert_eq!(has_winner(&grid), (false, false));
+/// ```
 fn has_winner(grid: &[[GridContentType; N_COLS as usize]; N_ROWS as usize]) -> (bool, bool) {
     // Checking rows
     for row in 0..3 {
@@ -99,6 +130,24 @@ fn has_winner(grid: &[[GridContentType; N_COLS as usize]; N_ROWS as usize]) -> (
     return (false, false);
 }
 
+/// Determines if the game is over, i.e., if there are no more empty cells left or if one
+/// player has three symbols in a row.
+///
+/// # Arguments
+///
+/// * `grid` - a reference to a 2D array of `GridContentType` with dimensions N_ROWS x N_COLS
+///
+/// # Returns
+///
+/// * `true` if the game is over, `false` otherwise.
+///
+/// # Examples
+///
+/// ```
+/// let grid = [['X', 'O', 'X'], ['O', 'O', 'X'], ['O', 'X', 'O']];
+/// let result = is_over(&grid);
+/// assert_eq!(result, true);
+/// ```
 fn is_over(grid: &[[GridContentType; N_COLS as usize]; N_ROWS as usize]) -> bool {
     let (mut x_counter, mut o_counter): (u8, u8) = (0, 0);
     for row in grid.iter() {
@@ -118,6 +167,26 @@ fn is_over(grid: &[[GridContentType; N_COLS as usize]; N_ROWS as usize]) -> bool
     return false;
 }
 
+/// Sets the piece of the given `piece_char` at the index `input_index` in the `grid`.
+///
+/// # Arguments
+///
+/// * `grid` - A mutable reference to the grid in which the piece will be set.
+/// * `input_index` - The index at which the piece will be set in the grid.
+/// * `piece_char` - The character representing the piece to be set ('X' or 'O').
+///
+/// # Example
+///
+/// ```
+/// use tic_tac_toe::{set_piece, GridContentType, N_COLS, N_ROWS};
+///
+/// let mut grid: [[GridContentType; N_COLS as usize]; N_ROWS as usize] = [[' '; N_COLS as usize]; N_ROWS as usize];
+/// let input_index = 5;
+/// let piece_char = &'X';
+///
+/// set_piece(&mut grid, &input_index, &piece_char);
+/// assert_eq!(grid[1][1], 'X');
+/// ```
 fn set_piece(grid: &mut[[GridContentType; N_COLS as usize]; N_ROWS as usize],
              input_index: &i32,
              piece_char: &char)
@@ -126,6 +195,35 @@ fn set_piece(grid: &mut[[GridContentType; N_COLS as usize]; N_ROWS as usize],
     grid[coordinates[0] as usize][coordinates[1] as usize] = *piece_char;
 }
 
+
+/// Checks whether a cell on the game grid is occupied.
+///
+/// This function takes in a mutable reference to the game grid and an input index as a reference.
+/// The input index is used to map to the corresponding cell on the game grid.
+/// If the cell is not empty, then this function returns true, indicating that the cell is occupied.
+/// Otherwise, it returns false, indicating that the cell is empty.
+///
+/// # Arguments
+///
+/// * `grid` - A mutable reference to the game grid.
+/// * `input_index` - The input index that maps to a cell on the game grid.
+///
+/// # Returns
+///
+/// * `true` if the cell on the game grid is occupied.
+/// * `false` if the cell on the game grid is empty.
+///
+/// # Examples
+///
+/// ```
+/// let mut grid = [[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']];
+/// assert_eq!(is_occupied(&mut grid, &5), false);
+/// assert_eq!(is_occupied(&mut grid, &4), false);
+///
+/// grid[1][1] = 'X';
+/// assert_eq!(is_occupied(&mut grid, &5), true);
+/// assert_eq!(is_occupied(&mut grid, &4), false);
+/// ```
 fn is_occupied(grid: &mut[[GridContentType; N_COLS as usize]; N_ROWS as usize],
                input_index: &i32) -> bool
 {
