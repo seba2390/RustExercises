@@ -1,3 +1,5 @@
+use std::io::Write;
+
 // Type aliases
 type GridContentType = char;
 // Constant variables
@@ -133,6 +135,7 @@ fn is_occupied(grid: &mut[[GridContentType; N_COLS as usize]; N_ROWS as usize],
     return false
 }
 
+
 fn main() {
 
     print_description();
@@ -141,77 +144,48 @@ fn main() {
     let mut grid: [[GridContentType; N_COLS as usize]; N_ROWS as usize] = [[NAN_TOKEN; N_COLS as usize]; N_ROWS as usize];
 
     // Starting game loop
-    for round in 0..N_ROUNDS {
+    'game: for round in 0..N_ROUNDS {
         println!("\n ================= Round {} ==================\n", round+1);
-        // Player 1 input
-        println!("Player 1 ('X') - type a number and press Enter: ");
-        let mut player_1_index_str = String::new();
-        std::io::stdin().read_line(&mut player_1_index_str).expect("Player 1 - Failed to read line.");
 
-        // Checking that index is within range
-        let mut player_1_index = loop {
-            match player_1_index_str.trim().parse::<i32>() {
-                Ok(num) if num >= 1 && num <= 9 => break num,
-                _ => {
+        for player_nr in 0..2 {
+            // Player input
+            let player_char = if player_nr == 0 { 'X'} else { 'O'};
+            println!("Player {} ('{}') - type a number and press Enter: ", player_nr+1, player_char);
+            // Checking that index is within range and the cell is unoccupied
+            #[allow(unused_assignments)] let mut player_input_num = 0;
+            loop {
+                std::io::stdout().flush().unwrap();
+                let mut input = String::new();
+                std::io::stdin().read_line(&mut input).expect("Failed to read line");
+                player_input_num = match input.trim().parse() {
+                    Ok(num) => num,
+                    Err(_) => continue,
+                };
+                if (player_input_num >= 1) && (player_input_num <= 9) && (!is_occupied(& mut grid, &player_input_num)) {
+                    break;
+                }
+                if player_input_num < 1 || player_input_num > 9 {
                     println!("Invalid input - please enter a number in the range [1, 9]!");
-                    player_1_index_str.clear();
-                    std::io::stdin().read_line(&mut player_1_index_str).expect("Player 1 - Failed to read line.");
+                } else if is_occupied(& mut grid, &player_input_num) {
+                    println!("Invalid input - please choose a free cell!");
                 }
             }
-        };
+            set_piece(&mut grid, &player_input_num, &player_char);
+            print_grid(&grid);
 
-        // TODO: Checking the index is unoccupied for player 1
-
-        set_piece(&mut grid, &player_1_index, &'X');
-        print_grid(&grid);
-
-        // Checking for game finished
-        if has_winner(&grid) == (true, false) {
-            println!("\n # PLAYER 1 HAS WON - GAME FINISHED! ");
-            break;
-        }
-        else if has_winner(&grid) == (false, true) {
-            println!("\n # PLAYER 2 HAS WON - GAME FINISHED! ");
-            break;
-        }
-        else if is_over(&grid) {
-            println!("\n # TIEBREAK - NO WINNER! ");
-            break;
-        }
-
-        // Player 2 input
-        println!("Player 2 ('O') - type a number and press Enter: ");
-        let mut player_2_index_str = String::new();
-        std::io::stdin().read_line(&mut player_2_index_str).expect("Player 2 - Failed to read line.");
-
-        // Checking that index is within range
-        let mut player_2_index = loop {
-            match player_2_index_str.trim().parse::<i32>() {
-                Ok(num) if num >= 1 && num <= 9 => break num,
-                _ => {
-                    println!("Invalid input - please enter a number in the range [1, 9]!");
-                    player_2_index_str.clear();
-                    std::io::stdin().read_line(&mut player_2_index_str).expect("Player 2 - Failed to read line.");
-                }
+            // Checking for game finished
+            if has_winner(&grid) == (true, false) {
+                println!("\n # PLAYER 1 HAS WON - GAME FINISHED! ");
+                break 'game;
             }
-        };
-        // TODO: Checking the index is unoccupied for player 2
-
-        set_piece(&mut grid, &player_2_index, &'O');
-        print_grid(&grid);
-
-        // Checking for game finished
-        if has_winner(&grid) == (true, false) {
-            println!("\n # PLAYER 1 HAS WON - GAME FINISHED! ");
-            break;
-        }
-        else if has_winner(&grid) == (false, true) {
-            println!("\n # PLAYER 2 HAS WON - GAME FINISHED! ");
-            break;
-        }
-        else if is_over(&grid) {
-            println!("\n # TIEBREAK - NO WINNER! ");
-            break;
+            else if has_winner(&grid) == (false, true) {
+                println!("\n # PLAYER 2 HAS WON - GAME FINISHED! ");
+                break 'game;
+            }
+            else if is_over(&grid) {
+                println!("\n # TIEBREAK - NO WINNER! ");
+                break 'game;
+            }
         }
     }
 
