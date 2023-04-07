@@ -141,30 +141,27 @@ fn main() {
     let mut grid: [[GridContentType; N_COLS as usize]; N_ROWS as usize] = [[NAN_TOKEN; N_COLS as usize]; N_ROWS as usize];
 
     // Starting game loop
-    for _round in 0..N_ROUNDS {
-
+    for round in 0..N_ROUNDS {
+        println!("\n ================= Round {} ==================\n", round+1);
         // Player 1 input
         println!("Player 1 ('X') - type a number and press Enter: ");
         let mut player_1_index_str = String::new();
         std::io::stdin().read_line(&mut player_1_index_str).expect("Player 1 - Failed to read line.");
-        let mut player_1_index = player_1_index_str.trim().parse::<i32>().expect("Player 1 - Invalid input");
 
-        // Checking that number is withing range
-        if player_1_index < 1 || player_1_index > 9 {
-            println!("Should be a number in [1;9] - please enter a new number!");
-            while player_1_index < 1 || player_1_index > 9 {
-                std::io::stdin().read_line(&mut player_1_index_str).expect("Player 1 - Failed to read line.");
-                player_1_index = player_1_index_str.trim().parse::<i32>().expect("Player 1 - Invalid input");
+        // Checking that index is within range
+        let mut player_1_index = loop {
+            match player_1_index_str.trim().parse::<i32>() {
+                Ok(num) if num >= 1 && num <= 9 => break num,
+                _ => {
+                    println!("Invalid input - please enter a number in the range [1, 9]!");
+                    player_1_index_str.clear();
+                    std::io::stdin().read_line(&mut player_1_index_str).expect("Player 1 - Failed to read line.");
+                }
             }
-        }
-        // Checking the index is unoccupied
-        if is_occupied(&mut grid, &player_1_index) {
-            println!("Index: {} is occupied! - please enter a new number", player_1_index);
-            while is_occupied(&mut grid, &player_1_index) {
-                std::io::stdin().read_line(&mut player_1_index_str).expect("Player 1 - Failed to read line.");
-                player_1_index = player_1_index_str.trim().parse::<i32>().expect("Player 1 - Invalid input");
-            }
-        }
+        };
+
+        // TODO: Checking the index is unoccupied for player 1
+
         set_piece(&mut grid, &player_1_index, &'X');
         print_grid(&grid);
 
@@ -186,24 +183,19 @@ fn main() {
         println!("Player 2 ('O') - type a number and press Enter: ");
         let mut player_2_index_str = String::new();
         std::io::stdin().read_line(&mut player_2_index_str).expect("Player 2 - Failed to read line.");
-        let mut player_2_index = player_2_index_str.trim().parse::<i32>().expect("Player 2 - Invalid input");
 
-        // Checking that number is withing range
-        if player_2_index < 1 || player_2_index > 9 {
-            println!("Should be a number in [1;9] - please enter a new number!");
-            while player_2_index < 1 || player_2_index > 9 {
-                std::io::stdin().read_line(&mut player_2_index_str).expect("Player 2 - Failed to read line.");
-                player_2_index = player_2_index_str.trim().parse::<i32>().expect("Player 2 - Invalid input");
+        // Checking that index is within range
+        let mut player_2_index = loop {
+            match player_2_index_str.trim().parse::<i32>() {
+                Ok(num) if num >= 1 && num <= 9 => break num,
+                _ => {
+                    println!("Invalid input - please enter a number in the range [1, 9]!");
+                    player_2_index_str.clear();
+                    std::io::stdin().read_line(&mut player_2_index_str).expect("Player 2 - Failed to read line.");
+                }
             }
-        }
-        // Checking the index is unoccupied
-        if is_occupied(&mut grid, &player_2_index) {
-            println!("Index: {} is occupied! - please enter a new number", player_2_index);
-            while is_occupied(&mut grid, &player_2_index) {
-                std::io::stdin().read_line(&mut player_2_index_str).expect("Player 2 - Failed to read line.");
-                player_2_index = player_2_index_str.trim().parse::<i32>().expect("Player 2 - Invalid input");
-            }
-        }
+        };
+        // TODO: Checking the index is unoccupied for player 2
 
         set_piece(&mut grid, &player_2_index, &'O');
         print_grid(&grid);
