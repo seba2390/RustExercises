@@ -6,6 +6,7 @@ type GridContentType = char;
 const N_ROWS: u32 = 3;
 const N_COLS: u32 = 3;
 const N_ROUNDS: u32 = 6;
+const N_PLAYERS: u32 = 2;
 const NAN_TOKEN: char = 'N';
 const __INDEX_MAP__: [[i32; 2]; 9]  = [[0,0], [0,1], [0,2],
                                        [1,0], [1,1], [1,2],
@@ -147,7 +148,7 @@ fn main() {
     'game: for round in 0..N_ROUNDS {
         println!("\n ================= Round {} ==================\n", round+1);
 
-        for player_nr in 0..2 {
+        for player_nr in 0..N_PLAYERS {
             // Player input
             let player_char = if player_nr == 0 { 'X'} else { 'O'};
             println!("Player {} ('{}') - type a number and press Enter: ", player_nr+1, player_char);
