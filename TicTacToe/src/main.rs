@@ -1,4 +1,4 @@
-#![crate_name = "doc"]
+#![crate_name = "tic_tac_toe"]
 
 use std::io::Write;
 
@@ -130,8 +130,8 @@ fn has_winner(grid: &[[GridContentType; N_COLS as usize]; N_ROWS as usize]) -> (
     return (false, false);
 }
 
-/// Determines if the game is over, i.e., if there are no more empty cells left or if one
-/// player has three symbols in a row.
+/// Determines if the game is over, i.e., if both
+/// player has three pieces placed on the board.
 ///
 /// # Arguments
 ///
@@ -140,14 +140,6 @@ fn has_winner(grid: &[[GridContentType; N_COLS as usize]; N_ROWS as usize]) -> (
 /// # Returns
 ///
 /// * `true` if the game is over, `false` otherwise.
-///
-/// # Examples
-///
-/// ```
-/// let grid = [['X', 'O', 'X'], ['O', 'O', 'X'], ['O', 'X', 'O']];
-/// let result = is_over(&grid);
-/// assert_eq!(result, true);
-/// ```
 fn is_over(grid: &[[GridContentType; N_COLS as usize]; N_ROWS as usize]) -> bool {
     let (mut x_counter, mut o_counter): (u8, u8) = (0, 0);
     for row in grid.iter() {
@@ -159,7 +151,7 @@ fn is_over(grid: &[[GridContentType; N_COLS as usize]; N_ROWS as usize]) -> bool
                 o_counter += 1;
             }
 
-            if x_counter == 3 || o_counter == 3 {
+            if x_counter == 3 && o_counter == 3 {
                 return true;
             }
         }

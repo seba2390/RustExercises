@@ -1,1 +1,1 @@
-/Users/sebastianyde/Library/CloudStorage/OneDrive-AarhusUniversitet/Div.\ Github\ projekter/Privat/RustExercises/TicTacToe/target/debug/tic_tac_toe: /Users/sebastianyde/Library/CloudStorage/OneDrive-AarhusUniversitet/Div.\ Github\ projekter/Privat/RustExercises/TicTacToe/src/main.rs
+C:\Users\Sebastian\ Yde\ Madsen\GithubProjekter\Privat\RustExercises\TicTacToe\target\debug\tic_tac_toe.exe: C:\Users\Sebastian\ Yde\ Madsen\GithubProjekter\Privat\RustExercises\TicTacToe\src\main.rs
