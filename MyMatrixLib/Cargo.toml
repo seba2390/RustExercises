@@ -2,11 +2,14 @@
 name = "main"
 version = "0.1.0"
 edition = "2021"
+authors = ["Sebastian Yde Madsen madsen3008@gmail.com"]
+description = "A implementation of a matrix struct w. standard impls."
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/seba2390"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-#[allow(non_snake_case)]
 MyMatrixLib = { path = "lib" }
 num-traits = "0.2"
 

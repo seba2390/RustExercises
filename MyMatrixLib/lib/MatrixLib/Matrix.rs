@@ -1,3 +1,5 @@
+use rand::distributions::{Distribution, Uniform, Bernoulli};
+
 /// A generic Matrix type that supports basic matrix operations.
 ///
 /// # Type Parameters
@@ -664,6 +666,78 @@ impl<T> Matrix<T>
             }
         }
         result
+    }
+}
+
+/// Generates a matrix of size `rows` by `cols` with random values sampled uniformly
+/// from the range `[lower_bound, upper_bound)`.
+///
+/// # Arguments
+///
+/// * `rows` - The number of rows in the matrix.
+/// * `cols` - The number of columns in the matrix.
+/// * `lower_bound` - The lower bound of the range of values to sample.
+/// * `upper_bound` - The upper bound of the range of values to sample.
+///
+/// # Panics
+///
+/// This function will panic if `upper_bound` is less than or equal to `lower_bound`.
+impl<T> Matrix<T>
+    where
+        T: std::ops::Add<Output=T> +
+        std::ops::Sub<Output=T> +
+        std::ops::Mul<Output=T> +
+        std::ops::Div<Output=T> +
+        std::default::Default +
+        std::clone::Clone +
+        std::marker::Copy +
+        num_traits::Zero +
+        num_traits::One +
+        rand::distributions::uniform::SampleUniform +
+        std::cmp::PartialOrd
+{
+    pub fn random_uniform(rows: usize, cols: usize, lower_bound: T, upper_bound: T) -> Matrix<T> {
+        if upper_bound <= lower_bound {
+            panic!("Upper bound cannot be less than or equal to lower bound");
+        }
+        // Sample uniformly in [low, high)
+        let distribution = Uniform::try_from(lower_bound..upper_bound).unwrap();
+        let mut rng = rand::thread_rng();
+
+        let mut vec_data = vec![T::zero(); rows * cols];
+        for idx in 0..rows*cols {
+            vec_data[idx] = distribution.sample(&mut rng);
+        }
+        Matrix { rows: rows, cols: cols, data: vec_data }
+    }
+}
+
+impl<T> Matrix<T>
+    where
+        T: std::ops::Add<Output=T> +
+        std::ops::Sub<Output=T> +
+        std::ops::Mul<Output=T> +
+        std::ops::Div<Output=T> +
+        std::default::Default +
+        std::clone::Clone +
+        std::marker::Copy +
+        num_traits::Zero +
+        num_traits::One +
+        rand::distributions::uniform::SampleUniform +
+        std::cmp::PartialOrd
+{
+    pub fn random_bernoulli(rows: usize, cols: usize, probability: f64) -> Matrix<T> {
+        if (probability <  0.0) || (probability > 1.0) {
+            panic!("Probability should be between 0.0 and 1.0");
+        }
+        let distribution = Bernoulli::new(probability).unwrap();
+        let mut rng = rand::thread_rng();
+
+        let mut vec_data = vec![T::zero(); rows * cols];
+        for idx in 0..rows*cols {
+            vec_data[idx] = if distribution.sample(&mut rng) { T::one() } else { T::zero() };
+        }
+        Matrix { rows: rows, cols: cols, data: vec_data }
     }
 }
 
