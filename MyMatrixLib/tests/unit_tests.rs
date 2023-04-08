@@ -229,3 +229,66 @@ mod initializers {
         test_matrix_identity_creation_::<f64>();
     }
 }
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///// Testing RNG methods for types: i8, i16, i32, i64, u8, u16, u32, u64, f32, f64 /////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#[cfg(test)]
+mod prng_initializers {
+
+
+
+    use MyMatrixLib::Matrix;
+    const MAX_SIZE: usize = 289; // Must have integer square root.
+    const MIN_SIZE: usize = 1;
+
+    fn test_matrix_uniform_rng_creation_<T>()
+        where
+            T:
+            rand::distributions::uniform::SampleUniform +
+            std::ops::Add<Output=T> +
+            std::ops::Sub<Output=T> +
+            std::ops::Mul<Output=T> +
+            std::ops::Div<Output=T> +
+            std::fmt::Display +
+            num_traits::Zero +
+            num_traits::One +
+            std::fmt::Debug +
+            PartialOrd +
+            PartialEq +
+            Default +
+            Clone +
+            Copy
+    {
+
+        for size in MIN_SIZE..MAX_SIZE {
+            let new_mat = Matrix::<T>::random_uniform(size, size, 0.into(), 255.into());
+            for row_idx in 0..size {
+                for col_idx in 0..size {
+                    assert!(new_mat[(row_idx, col_idx)]  >= 0 as T);
+                    assert!(new_mat[(row_idx, col_idx)]  < 255 as T);
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn test_matrix_uniform_rng_creation() {
+        test_matrix_uniform_rng_creation_::<i8>();
+        test_matrix_uniform_rng_creation_::<i16>();
+        test_matrix_uniform_rng_creation_::<i32>();
+        test_matrix_uniform_rng_creation_::<i64>();
+        test_matrix_uniform_rng_creation_::<u8>();
+        test_matrix_uniform_rng_creation_::<u16>();
+        test_matrix_uniform_rng_creation_::<u32>();
+        test_matrix_uniform_rng_creation_::<u64>();
+        test_matrix_uniform_rng_creation_::<f32>();
+        test_matrix_uniform_rng_creation_::<f64>();
+    }
+
+
+}
+
+

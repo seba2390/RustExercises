@@ -12,6 +12,7 @@ repository = "https://github.com/seba2390"
 [dependencies]
 MyMatrixLib = { path = "lib" }
 num-traits = "0.2"
+rand = "0.8.4"
 
 [[bin]]
 name = "main"

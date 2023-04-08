@@ -712,6 +712,25 @@ impl<T> Matrix<T>
     }
 }
 
+
+/// Generates a new matrix with dimensions `rows` by `cols`, where each entry is sampled
+/// independently from a Bernoulli distribution with success probability `probability`.
+///
+/// # Arguments
+///
+/// * `rows` - The number of rows in the matrix.
+/// * `cols` - The number of columns in the matrix.
+/// * `probability` - The probability of success for the Bernoulli distribution.
+///                   Must be a float between 0.0 and 1.0 (inclusive).
+///
+/// # Panics
+///
+/// This function panics if `probability` is not a float between 0.0 and 1.0 (inclusive).
+///
+/// # Returns
+///
+/// A new matrix of dimensions `rows` by `cols`, where each entry is independently sampled
+/// from a Bernoulli distribution with success probability `probability`.
 impl<T> Matrix<T>
     where
         T: std::ops::Add<Output=T> +
