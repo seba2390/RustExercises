@@ -1,16 +1,17 @@
 [package]
-name = "MyMatrixLib"
+name = "main"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[lib]
-name = "mymatrixlib"
-path = "lib/Matrix.rs"
-
 [dependencies]
+#[allow(non_snake_case)]
+MyMatrixLib = { path = "lib" }
 num-traits = "0.2"
 
-[workspace]
-members = ["src","lib"]
+[[bin]]
+name = "main"
+path = "src/main.rs"
+
+

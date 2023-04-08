@@ -1,4 +1,4 @@
-use MatrixLib::Matrix;
+use MyMatrixLib::Matrix;
 
 fn main() {
     println!("Hello, world!");
