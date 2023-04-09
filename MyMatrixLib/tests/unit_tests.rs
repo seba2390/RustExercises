@@ -344,4 +344,195 @@ mod prng_initializers {
 
 
 
+#[cfg(test)]
+mod operations {
+    use MyMatrixLib::Matrix;
+    const MAX_SIZE: usize = 100; // Must have integer square root.
+    const MIN_SIZE: usize = 1;
+    const F64_RANGE_SCALER: f64 = 0.5;
+    const F32_RANGE_SCALER: f32 = 0.5;
 
+    #[test]
+    fn test_matrix_addition()
+    {
+
+        // All the random upper and lower bounds as set in ways to prevent overflow.
+        for mat_size in MIN_SIZE..MAX_SIZE {
+            let mat_a_1 = Matrix::<i8>::random_uniform(mat_size, mat_size, -(2_i8.pow(8-2)-1) as i8, 2_i8.pow(8-2)-1 as i8);
+            let mat_b_1 = Matrix::<i8>::random_uniform(mat_size, mat_size, -(2_i8.pow(8-2)-1) as i8, 2_i8.pow(8-2)-1 as i8);
+            let mat_c_1 = mat_a_1.clone() + mat_b_1.clone(); // Add clone to matrices instead of consuming them
+
+            let mat_a_2 = Matrix::<i16>::random_uniform(mat_size, mat_size, -(2_i16.pow(16-2)-1), 2_i16.pow(16-2)-1 as i16);
+            let mat_b_2 = Matrix::<i16>::random_uniform(mat_size, mat_size, -(2_i16.pow(16-2)-1), 2_i16.pow(16-2)-1 as i16);
+            let mat_c_2 = mat_a_2.clone() + mat_b_2.clone(); // Add clone to matrices instead of consuming them
+
+            let mat_a_3 = Matrix::<i32>::random_uniform(mat_size, mat_size, -(2_i32.pow(32-2)-1), 2_i32.pow(32-2)-1 as i32);
+            let mat_b_3 = Matrix::<i32>::random_uniform(mat_size, mat_size, -(2_i32.pow(32-2)-1), 2_i32.pow(32-2)-1 as i32);
+            let mat_c_3 = mat_a_3.clone() + mat_b_3.clone(); // Add clone to matrices instead of consuming them
+
+            let mat_a_4 = Matrix::<i64>::random_uniform(mat_size, mat_size, -(2_i64.pow(64-2)-1), 2_i64.pow(64-2)-1 as i64);
+            let mat_b_4 = Matrix::<i64>::random_uniform(mat_size, mat_size, -(2_i64.pow(64-2)-1), 2_i64.pow(64-2)-1 as i64);
+            let mat_c_4 = mat_a_4.clone() + mat_b_4.clone(); // Add clone to matrices instead of consuming them
+
+            let mat_a_5 = Matrix::<u8>::random_uniform(mat_size, mat_size, u8::MIN, 2_u8.pow(8-2)-1 as u8);
+            let mat_b_5 = Matrix::<u8>::random_uniform(mat_size, mat_size, u8::MIN, 2_u8.pow(8-2)-1 as u8);
+            let mat_c_5 = mat_a_5.clone() + mat_b_5.clone(); // Add clone to matrices instead of consuming them
+
+            let mat_a_6 = Matrix::<u16>::random_uniform(mat_size, mat_size, u16::MIN, 2_u16.pow(16-2)-1 as u16);
+            let mat_b_6 = Matrix::<u16>::random_uniform(mat_size, mat_size, u16::MIN, 2_u16.pow(16-2)-1 as u16);
+            let mat_c_6 = mat_a_6.clone() + mat_b_6.clone(); // Add clone to matrices instead of consuming them
+
+            let mat_a_7 = Matrix::<u32>::random_uniform(mat_size, mat_size, u32::MIN, 2_u32.pow(32-2)-1 as u32);
+            let mat_b_7 = Matrix::<u32>::random_uniform(mat_size, mat_size, u32::MIN, 2_u32.pow(32-2)-1 as u32);
+            let mat_c_7 = mat_a_7.clone() + mat_b_7.clone(); // Add clone to matrices instead of consuming them
+
+            let mat_a_8 = Matrix::<u64>::random_uniform(mat_size, mat_size, u64::MIN, 2_u64.pow(64-2)-1 as u64);
+            let mat_b_8 = Matrix::<u64>::random_uniform(mat_size, mat_size, u64::MIN, 2_u64.pow(64-2)-1 as u64);
+            let mat_c_8 = mat_a_8.clone() + mat_b_8.clone(); // Add clone to matrices instead of consuming them
+
+            let mat_a_9 = Matrix::<f32>::random_uniform(mat_size, mat_size, 0.0, f32::MAX*0.5-1.0);
+            let mat_b_9 = Matrix::<f32>::random_uniform(mat_size, mat_size, 0.0, f32::MAX*0.5-1.0);
+            let mat_c_9 = mat_a_9.clone() + mat_b_9.clone(); // Add clone to matrices instead of consuming them
+
+            let mat_a_10 = Matrix::<f64>::random_uniform(mat_size, mat_size, 0.0, f64::MAX*0.5-1.0);
+            let mat_b_10 = Matrix::<f64>::random_uniform(mat_size, mat_size, 0.0, f64::MAX*0.5-1.0);
+            let mat_c_10 = mat_a_10.clone() + mat_b_10.clone(); // Add clone to matrices instead of consuming them
+
+            for row_idx in 0..mat_size {
+                for col_idx in 0..mat_size {
+                    assert_eq!(mat_c_1[(row_idx, col_idx)], mat_a_1[(row_idx,col_idx)] + mat_b_1[(row_idx,col_idx)]);
+                    assert_eq!(mat_c_2[(row_idx, col_idx)], mat_a_2[(row_idx,col_idx)] + mat_b_2[(row_idx,col_idx)]);
+                    assert_eq!(mat_c_3[(row_idx, col_idx)], mat_a_3[(row_idx,col_idx)] + mat_b_3[(row_idx,col_idx)]);
+                    assert_eq!(mat_c_4[(row_idx, col_idx)], mat_a_4[(row_idx,col_idx)] + mat_b_4[(row_idx,col_idx)]);
+                    assert_eq!(mat_c_5[(row_idx, col_idx)], mat_a_5[(row_idx,col_idx)] + mat_b_5[(row_idx,col_idx)]);
+                    assert_eq!(mat_c_6[(row_idx, col_idx)], mat_a_6[(row_idx,col_idx)] + mat_b_6[(row_idx,col_idx)]);
+                    assert_eq!(mat_c_7[(row_idx, col_idx)], mat_a_7[(row_idx,col_idx)] + mat_b_7[(row_idx,col_idx)]);
+                    assert_eq!(mat_c_8[(row_idx, col_idx)], mat_a_8[(row_idx,col_idx)] + mat_b_8[(row_idx,col_idx)]);
+                    assert_eq!(mat_c_9[(row_idx, col_idx)], mat_a_9[(row_idx,col_idx)] + mat_b_9[(row_idx,col_idx)]);
+                    assert_eq!(mat_c_10[(row_idx, col_idx)], mat_a_10[(row_idx,col_idx)] + mat_b_10[(row_idx,col_idx)]);
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn test_matrix_subtraction()
+    {
+
+        // All the random upper and lower bounds as set in ways to prevent overflow.
+        for mat_size in MIN_SIZE..MAX_SIZE {
+            let mat_a_1 = Matrix::<i8>::random_uniform(mat_size, mat_size, -(2_i8.pow(8-2)-1) as i8, 2_i8.pow(8-2)-1 as i8);
+            let mat_b_1 = Matrix::<i8>::random_uniform(mat_size, mat_size, -(2_i8.pow(8-2)-1) as i8, 2_i8.pow(8-2)-1 as i8);
+            let mat_c_1 = mat_a_1.clone() - mat_b_1.clone(); // Add clone to matrices instead of consuming them
+
+            let mat_a_2 = Matrix::<i16>::random_uniform(mat_size, mat_size, -(2_i16.pow(16-2)-1), 2_i16.pow(16-2)-1 as i16);
+            let mat_b_2 = Matrix::<i16>::random_uniform(mat_size, mat_size, -(2_i16.pow(16-2)-1), 2_i16.pow(16-2)-1 as i16);
+            let mat_c_2 = mat_a_2.clone() - mat_b_2.clone(); // Add clone to matrices instead of consuming them
+
+            let mat_a_3 = Matrix::<i32>::random_uniform(mat_size, mat_size, -(2_i32.pow(32-2)-1), 2_i32.pow(32-2)-1 as i32);
+            let mat_b_3 = Matrix::<i32>::random_uniform(mat_size, mat_size, -(2_i32.pow(32-2)-1), 2_i32.pow(32-2)-1 as i32);
+            let mat_c_3 = mat_a_3.clone() - mat_b_3.clone(); // Add clone to matrices instead of consuming them
+
+            let mat_a_4 = Matrix::<i64>::random_uniform(mat_size, mat_size, -(2_i64.pow(64-2)-1), 2_i64.pow(64-2)-1 as i64);
+            let mat_b_4 = Matrix::<i64>::random_uniform(mat_size, mat_size, -(2_i64.pow(64-2)-1), 2_i64.pow(64-2)-1 as i64);
+            let mat_c_4 = mat_a_4.clone() - mat_b_4.clone(); // Add clone to matrices instead of consuming them
+
+            let mat_a_5 = Matrix::<u8>::random_uniform(mat_size, mat_size, 2_u8.pow(8-2), u8::MAX);
+            let mat_b_5 = Matrix::<u8>::random_uniform(mat_size, mat_size, u8::MIN, 2_u8.pow(8-2)-1 as u8);
+            let mat_c_5 = mat_a_5.clone() - mat_b_5.clone(); // Add clone to matrices instead of consuming them
+
+            let mat_a_6 = Matrix::<u16>::random_uniform(mat_size, mat_size, 2_u16.pow(16-2), u16::MAX);
+            let mat_b_6 = Matrix::<u16>::random_uniform(mat_size, mat_size, u16::MIN, 2_u16.pow(16-2)-1 as u16);
+            let mat_c_6 = mat_a_6.clone() - mat_b_6.clone(); // Add clone to matrices instead of consuming them
+
+            let mat_a_7 = Matrix::<u32>::random_uniform(mat_size, mat_size, 2_u32.pow(32-2), u32::MAX);
+            let mat_b_7 = Matrix::<u32>::random_uniform(mat_size, mat_size, u32::MIN, 2_u32.pow(32-2)-1 as u32);
+            let mat_c_7 = mat_a_7.clone() - mat_b_7.clone(); // Add clone to matrices instead of consuming them
+
+            let mat_a_8 = Matrix::<u64>::random_uniform(mat_size, mat_size, 2_u64.pow(64-2), u64::MAX);
+            let mat_b_8 = Matrix::<u64>::random_uniform(mat_size, mat_size, u64::MIN, 2_u64.pow(64-2)-1 as u64);
+            let mat_c_8 = mat_a_8.clone() - mat_b_8.clone(); // Add clone to matrices instead of consuming them
+
+            let mat_a_9 = Matrix::<f32>::random_uniform(mat_size, mat_size, 0.0, f32::MAX*0.5-1.0);
+            let mat_b_9 = Matrix::<f32>::random_uniform(mat_size, mat_size, 0.0, f32::MAX*0.5-1.0);
+            let mat_c_9 = mat_a_9.clone() - mat_b_9.clone(); // Add clone to matrices instead of consuming them
+
+            let mat_a_10 = Matrix::<f64>::random_uniform(mat_size, mat_size, 0.0, f64::MAX*0.5-1.0);
+            let mat_b_10 = Matrix::<f64>::random_uniform(mat_size, mat_size, 0.0, f64::MAX*0.5-1.0);
+            let mat_c_10 = mat_a_10.clone() - mat_b_10.clone(); // Add clone to matrices instead of consuming them
+
+            for row_idx in 0..mat_size {
+                for col_idx in 0..mat_size {
+                    assert_eq!(mat_c_1[(row_idx, col_idx)], mat_a_1[(row_idx,col_idx)] - mat_b_1[(row_idx,col_idx)]);
+                    assert_eq!(mat_c_2[(row_idx, col_idx)], mat_a_2[(row_idx,col_idx)] - mat_b_2[(row_idx,col_idx)]);
+                    assert_eq!(mat_c_3[(row_idx, col_idx)], mat_a_3[(row_idx,col_idx)] - mat_b_3[(row_idx,col_idx)]);
+                    assert_eq!(mat_c_4[(row_idx, col_idx)], mat_a_4[(row_idx,col_idx)] - mat_b_4[(row_idx,col_idx)]);
+                    assert_eq!(mat_c_5[(row_idx, col_idx)], mat_a_5[(row_idx,col_idx)] - mat_b_5[(row_idx,col_idx)]);
+                    assert_eq!(mat_c_6[(row_idx, col_idx)], mat_a_6[(row_idx,col_idx)] - mat_b_6[(row_idx,col_idx)]);
+                    assert_eq!(mat_c_7[(row_idx, col_idx)], mat_a_7[(row_idx,col_idx)] - mat_b_7[(row_idx,col_idx)]);
+                    assert_eq!(mat_c_8[(row_idx, col_idx)], mat_a_8[(row_idx,col_idx)] - mat_b_8[(row_idx,col_idx)]);
+                    assert_eq!(mat_c_9[(row_idx, col_idx)], mat_a_9[(row_idx,col_idx)] - mat_b_9[(row_idx,col_idx)]);
+                    assert_eq!(mat_c_10[(row_idx, col_idx)], mat_a_10[(row_idx,col_idx)] - mat_b_10[(row_idx,col_idx)]);
+                }
+            }
+        }
+    }
+
+
+    #[test]
+    fn test_matrix_transposing()
+    {
+
+        // All the random upper and lower bounds as set in ways to prevent overflow.
+        for mat_size in MIN_SIZE..MAX_SIZE {
+            let rng_mat_1   =  Matrix::<i8 >::random_uniform(mat_size, mat_size, i8::MIN,  i8::MAX);
+            let rng_mat_1_t =  rng_mat_1.transpose();
+
+            let rng_mat_2 =  Matrix::<i16>::random_uniform(mat_size, mat_size, i16::MIN, i16::MAX);
+            let rng_mat_2_t =  rng_mat_2.transpose();
+
+            let rng_mat_3 =  Matrix::<i32>::random_uniform(mat_size, mat_size, i32::MIN, i32::MAX);
+            let rng_mat_3_t =  rng_mat_3.transpose();
+
+            let rng_mat_4 =  Matrix::<i64>::random_uniform(mat_size, mat_size, i64::MIN, i64::MAX);
+            let rng_mat_4_t =  rng_mat_4.transpose();
+
+            let rng_mat_5 =  Matrix::<u8 >::random_uniform(mat_size, mat_size, u8::MIN,  u8::MAX);
+            let rng_mat_5_t =  rng_mat_5.transpose();
+
+            let rng_mat_6 =  Matrix::<u16>::random_uniform(mat_size, mat_size, u16::MIN, u16::MAX);
+            let rng_mat_6_t =  rng_mat_6.transpose();
+
+            let rng_mat_7 =  Matrix::<u32>::random_uniform(mat_size, mat_size, u32::MIN, u32::MAX);
+            let rng_mat_7_t =  rng_mat_7.transpose();
+
+            let rng_mat_8 =  Matrix::<u64>::random_uniform(mat_size, mat_size, u64::MIN, u64::MAX);
+            let rng_mat_8_t =  rng_mat_8.transpose();
+
+            let rng_mat_9 =  Matrix::<f32>::random_uniform(mat_size, mat_size, f32::MIN*F32_RANGE_SCALER , f32::MAX*F32_RANGE_SCALER);
+            let rng_mat_9_t =  rng_mat_9.transpose();
+
+            let rng_mat_10 = Matrix::<f64 >::random_uniform(mat_size, mat_size, f64::MIN*F64_RANGE_SCALER, f64::MAX*F64_RANGE_SCALER);
+            let rng_mat_10_t =  rng_mat_10.transpose();
+
+            for row_idx in 0..mat_size {
+                for col_idx in 0..mat_size {
+                    assert_eq!(rng_mat_1[(row_idx, col_idx)], rng_mat_1_t[(col_idx, row_idx)]);
+                    assert_eq!(rng_mat_2[(row_idx, col_idx)], rng_mat_2_t[(col_idx, row_idx)]);
+                    assert_eq!(rng_mat_3[(row_idx, col_idx)], rng_mat_3_t[(col_idx, row_idx)]);
+                    assert_eq!(rng_mat_4[(row_idx, col_idx)], rng_mat_4_t[(col_idx, row_idx)]);
+                    assert_eq!(rng_mat_5[(row_idx, col_idx)], rng_mat_5_t[(col_idx, row_idx)]);
+                    assert_eq!(rng_mat_6[(row_idx, col_idx)], rng_mat_6_t[(col_idx, row_idx)]);
+                    assert_eq!(rng_mat_7[(row_idx, col_idx)], rng_mat_7_t[(col_idx, row_idx)]);
+                    assert_eq!(rng_mat_8[(row_idx, col_idx)], rng_mat_8_t[(col_idx, row_idx)]);
+                    assert_eq!(rng_mat_9[(row_idx, col_idx)], rng_mat_9_t[(col_idx, row_idx)]);
+                    assert_eq!(rng_mat_10[(row_idx, col_idx)], rng_mat_10_t[(col_idx, row_idx)]);
+
+
+                }
+            }
+        }
+    }
+
+
+}

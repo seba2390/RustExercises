@@ -85,20 +85,6 @@ impl<T> std::fmt::Display for Matrix<T>
 
 /// Implements the addition operation for matrices. The matrices must have the same dimensions.
 ///
-/// # Examples
-///
-/// ```
-/// use matrix::Matrix;
-///
-/// let a = Matrix::new(2, 2).fill(1.0);
-/// let b = Matrix::new(2, 2).fill(2.0);
-/// let c = a + b;
-/// assert_eq!(c[(0, 0)], 3.0);
-/// assert_eq!(c[(0, 1)], 3.0);
-/// assert_eq!(c[(1, 0)], 3.0);
-/// assert_eq!(c[(1, 1)], 3.0);
-/// ```
-///
 /// # Panics
 ///
 /// This function will panic if the dimensions of the matrices are not the same.
@@ -113,8 +99,7 @@ impl<T> std::fmt::Display for Matrix<T>
 /// A new `Matrix` object representing the result of the addition operation.
 impl<T> std::ops::Add for Matrix<T>
     where
-        T:
-        std::ops::Add<Output=T> +
+        T: std::ops::Add<Output=T> +
         std::ops::Sub<Output=T> +
         std::ops::Mul<Output=T> +
         std::ops::Div<Output=T> +
@@ -146,6 +131,7 @@ impl<T> std::ops::Add for Matrix<T>
         result
     }
 }
+
 
 /// Implements the subtraction operator for matrices.
 ///
@@ -378,8 +364,8 @@ impl<T> Matrix<T>
         num_traits::One
 {
     pub fn new(rows: usize, cols: usize) -> Self {
-        let data = vec![T::default(); rows * cols];
-        Matrix { rows, cols, data }
+        let data_vector = vec![T::default(); rows * cols];
+        Matrix { rows: rows, cols: cols, data: data_vector }
     }
 }
 
@@ -514,8 +500,8 @@ impl<T> Matrix<T>
         num_traits::One
 {
     pub fn zeros(rows: usize, cols: usize) -> Self {
-        let data = vec![T::zero(); rows * cols];
-        Matrix { rows, cols, data }
+        let data_vector = vec![T::zero(); rows * cols];
+        Matrix { rows: rows, cols: cols, data: data_vector }
     }
 }
 
@@ -558,8 +544,8 @@ impl<T> Matrix<T>
         num_traits::One
 {
     pub fn ones(rows: usize, cols: usize) -> Self {
-        let data = vec![T::one(); rows * cols];
-        Matrix { rows, cols, data }
+        let data_vector = vec![T::one(); rows * cols];
+        Matrix { rows: rows, cols: cols, data: data_vector }
     }
 }
 
@@ -615,11 +601,11 @@ impl<T> Matrix<T>
         num_traits::One,
 {
     pub fn identity(size: usize) -> Self {
-        let mut data = vec![T::zero(); size * size];
+        let mut data_vector = vec![T::zero(); size * size];
         for i in 0..size {
-            data[i * (size + 1)] = T::one();
+            data_vector[i * (size + 1)] = T::one();
         }
-        Matrix { rows: size, cols: size, data }
+        Matrix { rows: size, cols: size, data: data_vector }
     }
 }
 

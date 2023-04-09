@@ -22,7 +22,7 @@ fn main() {
     let rng_mat_2 = Matrix::<f32>::random_uniform(5,1,1.0,10.0);
     rng_mat_2.print();
     println!("==========");
-    let rng_mat_3 = Matrix::<u32>::random_bernoulli(5,5,0.9);
+    let rng_mat_3 = Matrix::<u32>::random_bernoulli(5,5,0.5);
     rng_mat_3.print();
 
 }
