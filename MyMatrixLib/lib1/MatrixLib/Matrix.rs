@@ -456,6 +456,61 @@ impl<T> Matrix<T>
 }
 
 
+/// Returns a view of the specified row in the matrix as a slice of type `&[T]`.
+///
+/// The `view_row` method takes a single argument, `row`, which specifies the
+/// index of the row to be returned. The method returns a reference to a slice
+/// of type `&[T]` containing the elements of the specified row in the matrix.
+///
+/// If the specified row index is out of bounds (i.e., less than 0 or greater
+/// than or equal to the number of rows in the matrix), the method panics with
+/// an error message indicating the out-of-bounds index and the dimensions of
+/// the matrix.
+///
+/// # Arguments
+///
+/// * `row` - The index of the row to be viewed
+///
+/// # Returns
+///
+/// A reference to a slice of type `&[T]` containing the elements of the
+/// specified row in the matrix
+///
+/// # Panics
+///
+/// If the specified row index is out of bounds (i.e., less than 0 or greater
+/// than or equal to the number of rows in the matrix), the method panics with
+/// an error message indicating the out-of-bounds index and the dimensions of
+/// the matrix.
+impl<T> Matrix<T>
+    where
+        T: std::ops::Add<Output = T>
+        + std::ops::Sub<Output = T>
+        + std::ops::Mul<Output = T>
+        + std::ops::Div<Output = T>
+        + std::clone::Clone
+        + std::marker::Copy
+        + std::default::Default
+        + num_traits::Zero
+        + num_traits::One,
+{
+    pub fn view_row(&self, row: usize) -> &[T] {
+        if row < self.rows {
+            let start = row * self.cols;
+            let end = start + self.cols;
+            &self.data[start..end]
+        } else {
+            panic!(
+                "Row index: {} out of bounds for matrix of dim {} x {}",
+                row, self.rows, self.cols
+            );
+        }
+    }
+}
+
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////// LINALG METHODS /////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////

@@ -9,7 +9,7 @@ repository = "https://github.com/seba2390"
 
 [lib]
 name = "MyMatrixLib"
-path = "MatrixLib/matrix.rs"
+path = "MatrixLib/Matrix.rs"
 
 [dependencies]
 num-traits = "0.2"
