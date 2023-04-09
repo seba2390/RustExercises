@@ -92,3 +92,114 @@ pub fn arg_abs_max<T>(slice: &[T]) -> usize
         .fold((T::zero(), 0), |(a, i), (b, j)| if a >= b {(a, i)} else {(b, j)})
         .1
 }
+
+
+/// Returns the maximum value in the given slice.
+///
+/// # Arguments
+///
+/// * `slice` - A slice of type `T` for which the maximum value is to be determined.
+///
+/// # Examples
+///
+/// ```
+/// use rust_linalg::max;
+///
+/// let v = vec![1, 2, 3, 4, 5];
+/// assert_eq!(max(&v), 5);
+///
+/// let v = vec![-1.0, -2.0, -3.0, -4.0, -5.0];
+/// assert_eq!(max(&v), -1.0);
+/// ```
+pub fn max<T>(slice: &[T]) -> T
+    where T: std::ops::Add<Output = T>
+            + std::ops::Sub<Output = T>
+            + std::ops::Mul<Output = T>
+            + std::ops::Div<Output = T>
+            + std::default::Default
+            + std::clone::Clone
+            + std::marker::Copy
+            + num_traits::Zero
+            + num_traits::One
+            + num_traits::Signed
+            + PartialOrd,
+
+{
+    slice.iter().fold(slice[0], |a, &b| if a > b { a } else { b })
+}
+
+
+/// Returns the index of the maximum element in the slice.
+///
+/// # Arguments
+///
+/// * `slice`: A slice of type `&[T]` where `T` is a numeric type that implements
+/// the `std::ops::Add`, `std::ops::Sub`, `std::ops::Mul`, `std::ops::Div`,
+/// `std::default::Default`, `std::clone::Clone`, `std::marker::Copy`,
+/// `num_traits::Zero`, `num_traits::One` and `PartialOrd` traits.
+///
+/// # Example
+///
+/// ```
+/// use my_math_lib::arg_max;
+///
+/// let v = vec![3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5];
+/// let idx = arg_max(&v);
+/// assert_eq!(idx, 5);
+/// ```
+pub fn arg_max<T>(slice: &[T]) -> usize
+    where
+        T: std::ops::Add<Output = T>
+        + std::ops::Sub<Output = T>
+        + std::ops::Mul<Output = T>
+        + std::ops::Div<Output = T>
+        + std::default::Default
+        + std::clone::Clone
+        + std::marker::Copy
+        + num_traits::Zero
+        + num_traits::One
+        + PartialOrd
+{
+    slice.iter()
+        .enumerate()
+        .fold((T::zero(), 0), |(max_val, max_idx), (idx, val)| {
+            if *val >= max_val {
+                (*val, idx)
+            } else {
+                (max_val, max_idx)
+            }
+        })
+        .1
+}
+
+
+/// Returns the sum of all elements in the input slice.
+///
+/// # Arguments
+///
+/// * `slice`: A slice of elements of type `T`.
+///
+/// # Example
+///
+/// ```
+/// use my_math_lib::sum;
+///
+/// let arr = [1, 2, 3, 4, 5];
+/// let result = sum(&arr);
+/// assert_eq!(result, 15);
+/// ```
+pub fn sum<T>(slice: &[T]) -> T
+    where
+        T: std::ops::Add<Output = T>
+        + std::ops::Sub<Output = T>
+        + std::ops::Mul<Output = T>
+        + std::ops::Div<Output = T>
+        + std::default::Default
+        + std::clone::Clone
+        + std::marker::Copy
+        + num_traits::Zero
+        + num_traits::One
+        + PartialOrd
+{
+    slice.iter().fold(T::default(), |a, &b| a + b)
+}

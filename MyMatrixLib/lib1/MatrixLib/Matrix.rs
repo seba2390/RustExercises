@@ -802,6 +802,9 @@ impl<T> Matrix<T>
     }
 }
 
+
+// TODO: implement partial pivoting LU decomposition (LUP) - see: https://courses.engr.illinois.edu/cs357/fa2019/references/ref-7-linsys/
+
 /// Performs LU decomposition on the input matrix `self` and returns a tuple
 /// containing the lower triangular matrix `L` and upper triangular matrix `U`.
 ///
@@ -851,18 +854,37 @@ impl<T> Matrix<T>
         // Has to be square matrix
         assert_eq!(self.rows, self.cols);
 
-        let mut L = Matrix::identity(self.rows);
-        let mut U = (*self).clone();
+        let mut L = Matrix::zeros(self.rows, self.cols);
+        let mut U = Matrix::zeros(self.rows, self.cols);
 
-        for k in 0..self.rows-1 {
-            for i in k+1..self.rows {
-                L[(i, k)] = U[(i, k)] / U[(k, k)];
-                for j in k..self.rows {
-                    U[(i, j)] = U[(i, j)] - L[(i, k)] * U[(k, j)];
+        for i in 0..self.rows {
+            // Upper Triangular
+            for k in i..self.rows {
+                // Summation of L(i, j) * U(j, k)
+                let mut sum = T::zero();
+                for j in 0..i {
+                    sum = sum + L[(i, j)] * U[(j, k)];
+                }
+                // Evaluating U(i, k)
+                U[(i, k)] = self[(i, k)] - sum;
+            }
+
+            // Lower Triangular
+            for k in i..self.rows {
+                if i == k {
+                    // Diagonal as 1
+                    L[(i, i)] = T::one();
+                } else {
+                    // Summation of L(k, j) * U(j, i)
+                    let mut sum = T::zero();
+                    for j in 0..i {
+                        sum = sum + L[(k, j)] * U[(j, i)];
+                    }
+                    // Evaluating L(k, i)
+                    L[(k, i)] = (self[(k, i)] - sum) / U[(i, i)];
                 }
             }
         }
         (L, U)
     }
 }
-

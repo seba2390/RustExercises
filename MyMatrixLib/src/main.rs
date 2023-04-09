@@ -26,8 +26,13 @@ fn main() {
     println!("==========");
     let row_2 = rng_mat_2.view_row(2);
     println!("row: {} is: {:?}", 2, row_2);
+    println!("row max: {} is: {}", 2, MyMathLib::max(row_2));
+    println!("row arg max: {} is: {}", 2, MyMathLib::arg_max(row_2));
     println!("row abs max: {} is: {}", 2, MyMathLib::abs_max(row_2));
     println!("row arg abs max: {} is: {}", 2, MyMathLib::arg_abs_max(row_2));
+    let (l, u) = rng_mat_2.LU_decompose();
+    println!("L: {} \n",l);
+    println!("U: {} \n",u);
     println!("==========");
     let rng_mat_3 = Matrix::<u32>::random_bernoulli(5,5,0.5);
     rng_mat_3.print();
