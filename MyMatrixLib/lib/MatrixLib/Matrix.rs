@@ -700,6 +700,7 @@ impl<T> Matrix<T>
         if upper_bound <= lower_bound {
             panic!("Upper bound cannot be less than or equal to lower bound");
         }
+
         // Sample uniformly in [low, high)
         let distribution = Uniform::try_from(lower_bound..upper_bound).unwrap();
         let mut rng = rand::thread_rng();
