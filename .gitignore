@@ -15,3 +15,5 @@ Cargo.lock
 .DS_Store
 /HelloWorld/.idea/
 /HelloWorld/.DS_Store
+/MyMatrixLib/target/
+/MatrixLib/
