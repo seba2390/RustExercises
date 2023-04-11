@@ -510,6 +510,97 @@ impl<T> Matrix<T>
 
 
 
+/// Returns a new Matrix containing a copy of the specified row of the original Matrix.
+///
+/// # Arguments
+///
+/// * `row` - The row index of the original Matrix to retrieve.
+///
+/// # Panics
+///
+/// This method will panic if the specified row index is out of bounds for the original Matrix.
+///
+/// # Examples
+///
+/// ```
+/// use generic_matrix::Matrix;
+///
+/// let data = vec![1, 2, 3, 4, 5, 6];
+/// let m = Matrix::new(2, 3, data);
+/// let row = m.get_row(1);
+/// assert_eq!(row, Matrix::new(1, 3, vec![4, 5, 6]));
+/// ```
+impl<T> Matrix<T>
+    where
+        T: std::ops::Add<Output = T>
+        + std::ops::Sub<Output = T>
+        + std::ops::Mul<Output = T>
+        + std::ops::Div<Output = T>
+        + std::clone::Clone
+        + std::marker::Copy
+        + std::default::Default
+        + num_traits::Zero
+        + num_traits::One,
+{
+    pub fn get_row(&self, row: usize) -> Matrix<T> {
+        if row < self.rows {
+            let start = row * self.cols;
+            let end = start + self.cols;
+            Matrix { rows: 1_usize, cols: self.cols, data: (&self.data[start..end]).clone().into_vec()}
+        } else {
+            panic!(
+                "Row index: {} out of bounds for matrix of dim {} x {}",
+                row, self.rows, self.cols
+            );
+        }
+    }
+}
+
+/// Returns a new Matrix containing a copy of the specified column of the original Matrix.
+///
+/// # Arguments
+///
+/// * `col` - The column index of the original Matrix to retrieve.
+///
+/// # Panics
+///
+/// This method will panic if the specified column index is out of bounds for the original Matrix.
+///
+/// # Examples
+///
+/// ```
+/// use generic_matrix::Matrix;
+///
+/// let data = vec![1, 2, 3, 4, 5, 6];
+/// let m = Matrix::new(2, 3, data);
+/// let col = m.get_col(1);
+/// assert_eq!(col, Matrix::new(2, 1, vec![2, 5]));
+/// ```
+impl<T> Matrix<T>
+    where
+        T: std::ops::Add<Output = T>
+        + std::ops::Sub<Output = T>
+        + std::ops::Mul<Output = T>
+        + std::ops::Div<Output = T>
+        + std::clone::Clone
+        + std::marker::Copy
+        + std::default::Default
+        + num_traits::Zero
+        + num_traits::One,
+{
+    pub fn get_col(&self, col: usize) -> Matrix<T> {
+        if col < self.cols {
+            let mut data = Vec::with_capacity(self.rows);
+            for i in 0..self.rows { data.push(self.data[i * self.cols + col]); }
+            Matrix { rows: self.rows, cols: 1_usize, data: data }
+        } else {
+            panic!(
+                "Column index: {} out of bounds for matrix of dim {} x {}",
+                col, self.rows, self.cols
+            );
+        }
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////// LINALG METHODS /////////////////////////////////////////////
@@ -832,17 +923,13 @@ impl<T> Matrix<T>
 /// mitigate this issue and yield a more stable decomposition.
 ///
 /// This method creates a copy of the input matrix `self` to avoid mutating the original.
-///
-/// # References
-///
-/// - Doolittle algorithm: https://en.wikipedia.org/wiki/LU_decomposition#Doolittle_algorithm
-/// - Numerical stability of LU decomposition: https://en.wikipedia.org/wiki/LU_decomposition#Numerical_stability
 impl<T> Matrix<T>
     where
         T: std::ops::Add<Output=T> +
         std::ops::Sub<Output=T> +
         std::ops::Mul<Output=T> +
         std::ops::Div<Output=T> +
+        std::cmp::PartialEq +
         std::default::Default +
         std::clone::Clone +
         std::marker::Copy +
@@ -854,11 +941,20 @@ impl<T> Matrix<T>
         // Has to be square matrix
         assert_eq!(self.rows, self.cols);
 
+        // Checking that matrix is appropriate for Doolittle LU decomposition
+        for pivot in 0..self.rows {
+            if self[(pivot, pivot)] == T::zero()
+            {
+                panic!("Cannot use Doolittle Algorithm for LU decomposition, when any diagonal element of A is zero.");
+            }
+        }
+
         let mut L = Matrix::zeros(self.rows, self.cols);
         let mut U = Matrix::zeros(self.rows, self.cols);
 
         for i in 0..self.rows {
-            // Upper Triangular
+
+            // Upper Triangular (U mat)
             for k in i..self.rows {
                 // Summation of L(i, j) * U(j, k)
                 let mut sum = T::zero();
@@ -869,7 +965,7 @@ impl<T> Matrix<T>
                 U[(i, k)] = self[(i, k)] - sum;
             }
 
-            // Lower Triangular
+            // Lower Triangular (L mat)
             for k in i..self.rows {
                 if i == k {
                     // Diagonal as 1

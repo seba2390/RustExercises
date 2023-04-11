@@ -537,5 +537,85 @@ mod operations {
         }
     }
 
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//////// Testing linalg methods for types: i8, i16, i32, i64, u8, u16, u32, u64, f32, f64 //////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+#[cfg(test)]
+mod linalg_operations {
+    use MyMatrixLib::Matrix;
+    const MAX_SIZE: usize = 50; // Must have integer square root.
+    const MIN_SIZE: usize = 1;
+    const F64_RANGE_SCALER: f64 = 0.5;
+    const F32_RANGE_SCALER: f32 = 0.5;
+
+    #[allow(non_snake_case)]
+    //#[test] TODO: Fix bounds to avoid overflow
+    fn test_matrix_LU_decomposition()
+    {
+        for size in MIN_SIZE..MAX_SIZE {
+
+            let rng_mat_1 =  Matrix::<i8 >::random_uniform(size, size, -11_i8,  11_i8);
+            let (l1, u1) = rng_mat_1.LU_decompose();
+            let prod1 = l1 * u1;
+
+            let rng_mat_2 =  Matrix::<i16>::random_uniform(size, size, -181_i16, 181_i16);
+            let (l2, u2) = rng_mat_2.LU_decompose();
+            let prod2 = l2 * u2;
+
+            let rng_mat_3 =  Matrix::<i32>::random_uniform(size, size, -46340_i32, 46340_i32);
+            let (l3, u3) = rng_mat_3.LU_decompose();
+            let prod3 = l3 * u3;
+
+            let rng_mat_4 =  Matrix::<i64>::random_uniform(size, size, -3037000499_i64, 3037000499_i64);
+            let (l4, u4) = rng_mat_4.LU_decompose();
+            let prod4 = l4 * u4;
+
+            let rng_mat_5 =  Matrix::<u8 >::random_uniform(size, size, 0_u8,  11_u8);
+            let (l5, u5) = rng_mat_5.LU_decompose();
+            let prod5 = l5 * u5;
+
+            let rng_mat_6 =  Matrix::<u16>::random_uniform(size, size, 0_u16, 181_u16);
+            let (l6, u6) = rng_mat_6.LU_decompose();
+            let prod6 = l6 * u6;
+
+            let rng_mat_7 =  Matrix::<u32>::random_uniform(size, size, 0_u32, 46340_u32);
+            let (l7, u7) = rng_mat_7.LU_decompose();
+            let prod7 = l7 * u7;
+
+            let rng_mat_8 =  Matrix::<u64>::random_uniform(size, size, 0_u64, 3037000499_u64);
+            let (l8, u8) = rng_mat_8.LU_decompose();
+            let prod8 = l8 * u8;
+
+            let rng_mat_9 =  Matrix::<f32>::random_uniform(size, size, -46340.0*0.5, 46340.0*0.5);
+            let (l9, u9) = rng_mat_9.LU_decompose();
+            let prod9 = l9 * u9;
+
+            let rng_mat_10 = Matrix::<f64 >::random_uniform(size, size, -3037000499.0*0.5, 3037000499.0*0.5);
+            let (l10, u10) = rng_mat_10.LU_decompose();
+            let prod10 = l10 * u10;
+
+            for row_idx in 0..size {
+                for col_idx in 0..size {
+                    assert_eq!(rng_mat_1[(row_idx, col_idx)],prod1[(row_idx, col_idx)]);
+                    assert_eq!(rng_mat_2[(row_idx, col_idx)],prod2[(row_idx, col_idx)]);
+                    assert_eq!(rng_mat_3[(row_idx, col_idx)],prod3[(row_idx, col_idx)]);
+                    assert_eq!(rng_mat_4[(row_idx, col_idx)],prod4[(row_idx, col_idx)]);
+                    assert_eq!(rng_mat_5[(row_idx, col_idx)],prod5[(row_idx, col_idx)]);
+                    assert_eq!(rng_mat_6[(row_idx, col_idx)],prod6[(row_idx, col_idx)]);
+                    assert_eq!(rng_mat_7[(row_idx, col_idx)],prod7[(row_idx, col_idx)]);
+                    assert_eq!(rng_mat_8[(row_idx, col_idx)],prod8[(row_idx, col_idx)]);
+                    assert_eq!(rng_mat_9[(row_idx, col_idx)],prod9[(row_idx, col_idx)]);
+                    assert_eq!(rng_mat_10[(row_idx, col_idx)],prod10[(row_idx, col_idx)]);
+                }
+            }
+        }
+    }
+
 
 }
